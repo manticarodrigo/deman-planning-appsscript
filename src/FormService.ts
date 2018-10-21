@@ -8,26 +8,30 @@ function updateForm(menus: Array<any>) {
     // Update the form's response destination.
     const ss = SpreadsheetApp.open(DriveApp.getFileById(createEntrySheet(/* TODO: pass in store data */)));
     form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
-
     // Delete existing form items.
     clearForm(form);
-    
-    menus.forEach((menu) => {
+    // Set form title.
+    form.setTitle(`Bienvenido al formulario semanal`);
+    form.setDescription('Favor llenar cada dia de la semana en las siguientes paginas.')
+    // Loop over each day's menu.
+    menus.forEach((menu, index) => {
+        // Add a page break.
+        const page = form.addPageBreakItem()
+        page.setTitle(menu.name);
+        page.setHelpText(`Favor llenar menu para el ${menu.name}`);
+
         // Create new items.
-        for (let i = 0; i < menu.length; i++) {
-            const menuRow = menu[i];
+        menu.values.forEach((row: any) => {
             const item = form.addTextItem();
             const textValidation = FormApp.createTextValidation()
                 .setHelpText('Favor ingresar numero entre 0 y 999.')
                 .requireNumberBetween(0, 999)
                 .build();
             item.setValidation(textValidation);
-            item.setTitle(menuRow[1]);
-            item.setHelpText(menuRow[0] + ' ' + menuRow[2]);
+            item.setTitle(row[1]);
+            item.setHelpText(row[0] + ' ' + row[2]);
             item.setRequired(true);
-        }
-        // Add a page break.
-        form.addPageBreakItem();
+        });
     });
 }
 
@@ -39,24 +43,20 @@ function clearForm(form: any) {
 }
 
 function createEntrySheet() {
-    var name = '(Sucursal) - ' + getDate(); // TODO: Prefix survey response file w/ store name
-    var folderId = '1vwn-J8wuW9rFsbBooqIpDUD98NI8KGwq'; // TODO: store in store folders
-    var resource = {
+    const name = '(Sucursal)_' + getDate(); // TODO: Prefix survey response file w/ store name
+    const folderId = '1vwn-J8wuW9rFsbBooqIpDUD98NI8KGwq'; // TODO: store in store folders
+    const resource = {
         title: name,
         // @ts-ignore
         mimeType: MimeType.GOOGLE_SHEETS,
         parents: [{ id: folderId }]
     };
     // @ts-ignore
-    var file = Drive.Files.insert(resource);
+    const file = Drive.Files.insert(resource);
     return file.id;
 }
 
 function getDate() {
-    var currentDate = new Date();
-    var date = currentDate.getDate();
-    var month = currentDate.getMonth(); // Careful! January is 0 not 1
-    var year = currentDate.getFullYear();
-    var dateString = date + "-" + (month + 1) + "-" + year;
-    return dateString;
+    const date = new Date();
+    return `${date.getDate()}_${date.getMonth() + 1} _${date.getFullYear()}`;
 }
