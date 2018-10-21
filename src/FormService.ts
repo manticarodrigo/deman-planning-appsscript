@@ -1,19 +1,20 @@
 /**
    Reset Form and build menu.
 */
-function updateForm(menu) {
-    // Use your form ID here. You can get it from the URL.
-    var form = FormApp.openById('1JWr5Fl6AwkpaFgC_CmDlQgvLjyANBqakeP7Wiu6KI_4');
+
+function updateForm(menu: any) {
+    // Use your yo form ID here. You can get it from the URL.
+    const form = FormApp.openById('1JWr5Fl6AwkpaFgC_CmDlQgvLjyANBqakeP7Wiu6KI_4');
     // Update the form's response destination.
-    var ss = SpreadsheetApp.open(DriveApp.getFileById(createEntrySheet()));
+    const ss = SpreadsheetApp.open(DriveApp.getFileById(createEntrySheet()));
     form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
     // Delete existing form items.
     clearForm(form);
     // Create new items.
-    for (i = 0; i < menu.length; i++) {
-        var menuRow = menu[i];
-        var item = form.addTextItem();
-        var textValidation = FormApp.createTextValidation()
+    for (let i = 0; i < menu.length; i++) {
+        const menuRow = menu[i];
+        const item = form.addTextItem();
+        const textValidation = FormApp.createTextValidation()
             .setHelpText('Favor ingresar numero entre 0 y 999.')
             .requireNumberBetween(0, 999)
             .build();
@@ -23,23 +24,28 @@ function updateForm(menu) {
         item.setRequired(true);
     }
 }
-function clearForm(form) {
-    var items = form.getItems();
+
+function clearForm(form: any) {
+    const items = form.getItems();
     while (items.length > 0) {
         form.deleteItem(items.pop());
     }
 }
+
 function createEntrySheet() {
     var name = 'Entradas ' + getDate();
-    var folderId = '1m800AgtWh5wm8YLLN8CCr026yQIQZuZg';
+    var folderId = '1vwn-J8wuW9rFsbBooqIpDUD98NI8KGwq';
     var resource = {
         title: name,
+        // @ts-ignore
         mimeType: MimeType.GOOGLE_SHEETS,
         parents: [{ id: folderId }]
     };
+    // @ts-ignore
     var file = Drive.Files.insert(resource);
     return file.id;
 }
+
 function getDate() {
     var currentDate = new Date();
     var date = currentDate.getDate();
