@@ -3,10 +3,10 @@
 */
 
 function updateForm(menu: any) {
-    // Use your yo form ID here. You can get it from the URL.
-    const form = FormApp.openById('1JWr5Fl6AwkpaFgC_CmDlQgvLjyANBqakeP7Wiu6KI_4');
+    // Use your form ID here. You can get it from the URL.
+    const form = FormApp.openById('1JWr5Fl6AwkpaFgC_CmDlQgvLjyANBqakeP7Wiu6KI_4'); // TODO: create forms for each store
     // Update the form's response destination.
-    const ss = SpreadsheetApp.open(DriveApp.getFileById(createEntrySheet()));
+    const ss = SpreadsheetApp.open(DriveApp.getFileById(createEntrySheet(/* TODO: pass in store data */)));
     form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
     // Delete existing form items.
     clearForm(form);
@@ -33,8 +33,8 @@ function clearForm(form: any) {
 }
 
 function createEntrySheet() {
-    var name = 'Entradas ' + getDate();
-    var folderId = '1vwn-J8wuW9rFsbBooqIpDUD98NI8KGwq';
+    var name = '(Sucursal) - ' + getDate(); // TODO: Prefix survey response file w/ store name
+    var folderId = '1vwn-J8wuW9rFsbBooqIpDUD98NI8KGwq'; // TODO: store in store folders
     var resource = {
         title: name,
         // @ts-ignore
@@ -49,7 +49,7 @@ function createEntrySheet() {
 function getDate() {
     var currentDate = new Date();
     var date = currentDate.getDate();
-    var month = currentDate.getMonth(); // Be careful! January is 0 not 1
+    var month = currentDate.getMonth(); // Careful! January is 0 not 1
     var year = currentDate.getFullYear();
     var dateString = date + "-" + (month + 1) + "-" + year;
     return dateString;
