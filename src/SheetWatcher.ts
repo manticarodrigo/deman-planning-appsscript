@@ -2,7 +2,7 @@
    After any change in the sheet, update the options in the Form.
 */
 
-function onChange(_:any) {
+function onChange() {
 	var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[2];
 	var namedRanges = sheet.getNamedRanges();
 	
