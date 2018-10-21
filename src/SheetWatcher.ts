@@ -3,7 +3,7 @@
 */
 
 function onChange() {
-	var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[2];
+	var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[1];
 	var namedRanges = sheet.getNamedRanges();
 	
 	var skuDailyMenus = [];
