@@ -2,27 +2,33 @@
    Reset Form and build menu.
 */
 
-function updateForm(menu: any) {
+function updateForm(menus: Array<any>) {
     // Use your form ID here. You can get it from the URL.
     const form = FormApp.openById('1JWr5Fl6AwkpaFgC_CmDlQgvLjyANBqakeP7Wiu6KI_4'); // TODO: create forms for each store
     // Update the form's response destination.
     const ss = SpreadsheetApp.open(DriveApp.getFileById(createEntrySheet(/* TODO: pass in store data */)));
     form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
+
     // Delete existing form items.
     clearForm(form);
-    // Create new items.
-    for (let i = 0; i < menu.length; i++) {
-        const menuRow = menu[i];
-        const item = form.addTextItem();
-        const textValidation = FormApp.createTextValidation()
-            .setHelpText('Favor ingresar numero entre 0 y 999.')
-            .requireNumberBetween(0, 999)
-            .build();
-        item.setValidation(textValidation);
-        item.setTitle(menuRow[1]);
-        item.setHelpText(menuRow[0] + ' ' + menuRow[2]);
-        item.setRequired(true);
-    }
+    
+    menus.forEach((menu) => {
+        // Create new items.
+        for (let i = 0; i < menu.length; i++) {
+            const menuRow = menu[i];
+            const item = form.addTextItem();
+            const textValidation = FormApp.createTextValidation()
+                .setHelpText('Favor ingresar numero entre 0 y 999.')
+                .requireNumberBetween(0, 999)
+                .build();
+            item.setValidation(textValidation);
+            item.setTitle(menuRow[1]);
+            item.setHelpText(menuRow[0] + ' ' + menuRow[2]);
+            item.setRequired(true);
+        }
+        // Add a page break.
+        form.addPageBreakItem();
+    });
 }
 
 function clearForm(form: any) {

@@ -3,17 +3,17 @@
 */
 
 function onChange() {
+	// Get base spreadsheet with weekly product info
 	var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[1];
 	var namedRanges = sheet.getNamedRanges();
 	
-	var skuDailyMenus = [];
 	// Get data from specified ranges
+	var skuDailyMenus = [];
 	for (var i = 0; i < namedRanges.length; i++) {
 		var values = namedRanges[i].getRange().getValues();
 		skuDailyMenus.push(values);
 	}
 	
-	// TODO: Use date to determine which menu to create in forms.
-	// Currently defaults to Monday.
-	updateForm(skuDailyMenus[0]);
+	// Create form with pages for each day of the week.
+	updateForm(skuDailyMenus);
 }
