@@ -11,7 +11,7 @@ function updateForm(menus: Array<any>) {
     // Delete existing form items.
     clearForm(form);
     // Set form title.
-    form.setTitle(`Bienvenido al formulario semanal`);
+    form.setTitle('Bienvenid@ al formulario semanal.');
     form.setDescription('Favor llenar cada dia de la semana en las siguientes paginas.')
     // Loop over each day's menu.
     menus.forEach((menu) => {
